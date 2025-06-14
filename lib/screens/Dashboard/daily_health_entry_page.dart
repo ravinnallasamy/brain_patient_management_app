@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 class DailyHealthEntryPage extends StatefulWidget {
-  const DailyHealthEntryPage({super.key});
+  final String patientId;
+
+  const DailyHealthEntryPage({super.key, required this.patientId});
 
   @override
   State<DailyHealthEntryPage> createState() => _DailyHealthEntryPageState();
@@ -30,13 +33,162 @@ class _DailyHealthEntryPageState extends State<DailyHealthEntryPage> {
     'Afternoon': false,
     'Night': false,
   };
+  bool _isLoading = false;
+  bool _isExistingEntry = false;
+  int? _existingEntryId;
+
+  final supabase = Supabase.instance.client;
+
+  @override
+  void initState() {
+    super.initState();
+    _checkExistingEntry();
+  }
+
+  Future<void> _checkExistingEntry() async {
+    setState(() => _isLoading = true);
+
+    try {
+      final now = DateTime.now().toLocal();
+      final today = DateTime(now.year, now.month, now.day);
+      final tomorrow = today.add(const Duration(days: 1));
+
+      final response = await supabase
+          .from('health_entries')
+          .select()
+          .eq('patient_id', widget.patientId)
+          .gte('entry_date', today.toIso8601String())
+          .lt('entry_date', tomorrow.toIso8601String())
+          .maybeSingle();
+
+      if (response != null) {
+        setState(() {
+          _isExistingEntry = true;
+          _existingEntryId = response['id'];
+          headacheLevel = response['headache_level']?.toString() ?? '';
+          waterIntake = {
+            'Morning': response['water_morning'] ?? false,
+            'Afternoon': response['water_afternoon'] ?? false,
+            'Night': response['water_night'] ?? false,
+          };
+          foodTaken = {
+            'Morning': response['food_morning'] ?? false,
+            'Afternoon': response['food_afternoon'] ?? false,
+            'Night': response['food_night'] ?? false,
+          };
+          exerciseDone = response['exercise_done'] ?? false;
+          medicinesTaken = {
+            'Morning': response['medicine_morning'] ?? false,
+            'Afternoon': response['medicine_afternoon'] ?? false,
+            'Night': response['medicine_night'] ?? false,
+          };
+          foodDisabled = {
+            'Morning': response['food_morning'] != null,
+            'Afternoon': response['food_afternoon'] != null,
+            'Night': response['food_night'] != null,
+          };
+        });
+      } else {
+        // Reset all fields for a new day
+        setState(() {
+          _isExistingEntry = false;
+          _existingEntryId = null;
+          headacheLevel = '';
+          waterIntake = {
+            'Morning': false,
+            'Afternoon': false,
+            'Night': false,
+          };
+          foodTaken = {
+            'Morning': false,
+            'Afternoon': false,
+            'Night': false,
+          };
+          exerciseDone = false;
+          medicinesTaken = {
+            'Morning': false,
+            'Afternoon': false,
+            'Night': false,
+          };
+          foodDisabled = {
+            'Morning': false,
+            'Afternoon': false,
+            'Night': false,
+          };
+        });
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error loading existing data: ${e.toString()}')),
+      );
+    } finally {
+      setState(() => _isLoading = false);
+    }
+  }
 
   void _handleFoodTap(String time, bool value) {
-    if (!foodDisabled[time]!) {
-      setState(() {
-        foodTaken[time] = value;
+    setState(() {
+      foodTaken[time] = value;
+      if (!_isExistingEntry) {
         foodDisabled[time] = true;
+      }
+    });
+  }
+
+  Future<void> _submitData() async {
+    setState(() => _isLoading = true);
+
+    try {
+      final now = DateTime.now().toLocal();
+      final today = DateTime(now.year, now.month, now.day);
+
+      final data = {
+        'patient_id': widget.patientId,
+        'entry_date': today.toIso8601String(),
+        'headache_level': headacheLevel.isEmpty ? null : headacheLevel,
+        'water_morning': waterIntake['Morning'],
+        'water_afternoon': waterIntake['Afternoon'],
+        'water_night': waterIntake['Night'],
+        'food_morning': foodTaken['Morning'],
+        'food_afternoon': foodTaken['Afternoon'],
+        'food_night': foodTaken['Night'],
+        'exercise_done': exerciseDone,
+        'medicine_morning': medicinesTaken['Morning'],
+        'medicine_afternoon': medicinesTaken['Afternoon'],
+        'medicine_night': medicinesTaken['Night'],
+      };
+
+      if (_isExistingEntry && _existingEntryId != null) {
+        await supabase
+            .from('health_entries')
+            .update(data)
+            .eq('id', _existingEntryId!);
+      } else {
+        await supabase
+            .from('health_entries')
+            .insert(data);
+      }
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Data Submitted Successfully!")),
+      );
+
+      setState(() {
+        if (!_isExistingEntry) {
+          _isExistingEntry = true;
+          foodDisabled = {
+            'Morning': foodTaken['Morning'] != null,
+            'Afternoon': foodTaken['Afternoon'] != null,
+            'Night': foodTaken['Night'] != null,
+          };
+        }
       });
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error submitting data: ${e.toString()}')),
+      );
+    } finally {
+      setState(() => _isLoading = false);
     }
   }
 
@@ -60,7 +212,7 @@ class _DailyHealthEntryPageState extends State<DailyHealthEntryPage> {
           selected: headacheLevel == level,
           onSelected: (selected) {
             setState(() {
-              headacheLevel = level;
+              headacheLevel = selected ? level : '';
             });
           },
           selectedColor: Colors.deepPurpleAccent,
@@ -99,17 +251,30 @@ class _DailyHealthEntryPageState extends State<DailyHealthEntryPage> {
               IconButton(
                 icon: Icon(
                   Icons.check_circle,
-                  color: data[time]! ? Colors.green : Colors.grey,
+                  color: data[time]!
+                      ? Colors.green
+                      : isDisabled ? Colors.grey[300] : Colors.grey,
                 ),
                 onPressed: isDisabled ? null : () => onTap!(time, true),
               ),
               IconButton(
                 icon: Icon(
                   Icons.cancel,
-                  color: !data[time]! ? Colors.red : Colors.grey,
+                  color: !data[time]!
+                      ? Colors.red
+                      : isDisabled ? Colors.grey[300] : Colors.grey,
                 ),
                 onPressed: isDisabled ? null : () => onTap!(time, false),
               ),
+              if (isDisabled && _isExistingEntry)
+                IconButton(
+                  icon: const Icon(Icons.edit, size: 18),
+                  onPressed: () {
+                    setState(() {
+                      foodDisabled[time] = false;
+                    });
+                  },
+                ),
             ],
           ),
         );
@@ -121,7 +286,7 @@ class _DailyHealthEntryPageState extends State<DailyHealthEntryPage> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Text("Exercise Done: ", style: TextStyle(fontSize: 16)),
+        const Text("Exercise Done: ", style: TextStyle(fontSize: 16)),
         Switch(
           value: exerciseDone,
           onChanged: (val) {
@@ -139,14 +304,25 @@ class _DailyHealthEntryPageState extends State<DailyHealthEntryPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Daily Health Entry'),
+        title: Text(_isExistingEntry ? 'Update Daily Entry' : 'New Daily Entry'),
         backgroundColor: Colors.deepPurple,
       ),
-      body: SingleChildScrollView(
+      body: _isLoading
+          ? const Center(child: CircularProgressIndicator())
+          : SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            if (_isExistingEntry)
+              Padding(
+                padding: const EdgeInsets.only(bottom: 16.0),
+                child: Text(
+                  'Updating existing entry for today',
+                  style: TextStyle(color: Colors.grey[600]),
+                ),
+              ),
+
             _buildSectionTitle("🧠 Headache Level"),
             _buildHeadacheLevel(),
 
@@ -154,7 +330,8 @@ class _DailyHealthEntryPageState extends State<DailyHealthEntryPage> {
             _buildWaterIntake(),
 
             _buildSectionTitle("🍲 Food Intake"),
-            _buildToggleButtons(foodTaken, "Food", onTap: _handleFoodTap, disabled: foodDisabled),
+            _buildToggleButtons(foodTaken, "Food",
+                onTap: _handleFoodTap, disabled: foodDisabled),
 
             _buildSectionTitle("🏃‍♀️ Exercise"),
             _buildExerciseToggle(),
@@ -169,15 +346,11 @@ class _DailyHealthEntryPageState extends State<DailyHealthEntryPage> {
             const SizedBox(height: 20),
             Center(
               child: ElevatedButton(
-                onPressed: () {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text("Data Submitted Successfully!")),
-                  );
-                },
+                onPressed: _submitData,
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.deepPurple,
-                  padding:
-                  const EdgeInsets.symmetric(horizontal: 40, vertical: 15),
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 40, vertical: 15),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(30),
                   ),
