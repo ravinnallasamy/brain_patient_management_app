@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+<<<<<<< HEAD
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 // 👇 Replace this with the actual path to your LoginScreen
@@ -54,10 +55,16 @@ class LogoutPage extends StatelessWidget {
       }
     }
   }
+=======
+
+class LogoutPage extends StatelessWidget {
+  const LogoutPage({super.key});
+>>>>>>> ac42521
 
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
+<<<<<<< HEAD
       title: const Text('Confirm Logout'),
       content: const Text('Are you sure you want to logout?'),
       actions: [
@@ -71,6 +78,21 @@ class LogoutPage extends StatelessWidget {
           ),
           onPressed: () => _updateLogoutTime(context),
           child: const Text('Logout'),
+=======
+      title: const Text("Confirm Logout"),
+      content: const Text("Are you sure you want to logout?"),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.pop(context),
+          child: const Text("Cancel"),
+        ),
+        ElevatedButton(
+          style: ElevatedButton.styleFrom(backgroundColor: Colors.deepPurple),
+          onPressed: () {
+            Navigator.pushNamedAndRemoveUntil(context, '/login', (route) => false);
+          },
+          child: const Text("Logout"),
+>>>>>>> ac42521
         ),
       ],
     );

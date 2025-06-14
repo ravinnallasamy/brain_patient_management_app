@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+<<<<<<< HEAD
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class UpcomingConsultationPage extends StatefulWidget {
@@ -103,6 +104,17 @@ class _UpcomingConsultationPageState extends State<UpcomingConsultationPage> {
 
   @override
   Widget build(BuildContext context) {
+=======
+
+class UpcomingConsultationPage extends StatelessWidget {
+  const UpcomingConsultationPage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    // Simulated consultation date; replace with actual data fetching logic
+    final String? consultationDate = null; // e.g., 'May 10, 2025'
+
+>>>>>>> ac42521
     return Scaffold(
       appBar: AppBar(
         title: const Text("Upcoming Consultation"),
@@ -122,6 +134,7 @@ class _UpcomingConsultationPageState extends State<UpcomingConsultationPage> {
                   color: Colors.deepPurple.shade100,
                   blurRadius: 8,
                   offset: const Offset(2, 4),
+<<<<<<< HEAD
                 )
               ],
             ),
@@ -152,10 +165,17 @@ class _UpcomingConsultationPageState extends State<UpcomingConsultationPage> {
               ],
             )
                 : Column(
+=======
+                ),
+              ],
+            ),
+            child: Column(
+>>>>>>> ac42521
               mainAxisSize: MainAxisSize.min,
               children: [
                 const Icon(Icons.calendar_today, size: 60, color: Colors.deepPurple),
                 const SizedBox(height: 20),
+<<<<<<< HEAD
                 if (upcomingAppointment != null) ...[
                   const Text(
                     "Next Consultation:",
@@ -175,6 +195,19 @@ class _UpcomingConsultationPageState extends State<UpcomingConsultationPage> {
                     "No upcoming appointments scheduled.",
                     style: TextStyle(fontSize: 18, color: Colors.deepPurple),
                   ),
+=======
+                Text(
+                  consultationDate != null
+                      ? "Next Consultation Date:\n$consultationDate"
+                      : "Date will be announced soon.",
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.deepPurple,
+                  ),
+                ),
+>>>>>>> ac42521
               ],
             ),
           ),
@@ -182,6 +215,7 @@ class _UpcomingConsultationPageState extends State<UpcomingConsultationPage> {
       ),
     );
   }
+<<<<<<< HEAD
 
   Widget _buildDetailRow(String label, String value) {
     return Padding(
@@ -207,4 +241,6 @@ class _UpcomingConsultationPageState extends State<UpcomingConsultationPage> {
       ),
     );
   }
+=======
+>>>>>>> ac42521
 }

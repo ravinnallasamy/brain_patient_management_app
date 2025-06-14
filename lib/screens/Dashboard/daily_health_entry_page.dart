@@ -1,10 +1,16 @@
 import 'package:flutter/material.dart';
+<<<<<<< HEAD
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class DailyHealthEntryPage extends StatefulWidget {
   final String patientId;
 
   const DailyHealthEntryPage({super.key, required this.patientId});
+=======
+
+class DailyHealthEntryPage extends StatefulWidget {
+  const DailyHealthEntryPage({super.key});
+>>>>>>> ac42521
 
   @override
   State<DailyHealthEntryPage> createState() => _DailyHealthEntryPageState();
@@ -33,6 +39,7 @@ class _DailyHealthEntryPageState extends State<DailyHealthEntryPage> {
     'Afternoon': false,
     'Night': false,
   };
+<<<<<<< HEAD
   bool _isLoading = false;
   bool _isExistingEntry = false;
   int? _existingEntryId;
@@ -189,6 +196,15 @@ class _DailyHealthEntryPageState extends State<DailyHealthEntryPage> {
       );
     } finally {
       setState(() => _isLoading = false);
+=======
+
+  void _handleFoodTap(String time, bool value) {
+    if (!foodDisabled[time]!) {
+      setState(() {
+        foodTaken[time] = value;
+        foodDisabled[time] = true;
+      });
+>>>>>>> ac42521
     }
   }
 
@@ -212,7 +228,11 @@ class _DailyHealthEntryPageState extends State<DailyHealthEntryPage> {
           selected: headacheLevel == level,
           onSelected: (selected) {
             setState(() {
+<<<<<<< HEAD
               headacheLevel = selected ? level : '';
+=======
+              headacheLevel = level;
+>>>>>>> ac42521
             });
           },
           selectedColor: Colors.deepPurpleAccent,
@@ -251,15 +271,20 @@ class _DailyHealthEntryPageState extends State<DailyHealthEntryPage> {
               IconButton(
                 icon: Icon(
                   Icons.check_circle,
+<<<<<<< HEAD
                   color: data[time]!
                       ? Colors.green
                       : isDisabled ? Colors.grey[300] : Colors.grey,
+=======
+                  color: data[time]! ? Colors.green : Colors.grey,
+>>>>>>> ac42521
                 ),
                 onPressed: isDisabled ? null : () => onTap!(time, true),
               ),
               IconButton(
                 icon: Icon(
                   Icons.cancel,
+<<<<<<< HEAD
                   color: !data[time]!
                       ? Colors.red
                       : isDisabled ? Colors.grey[300] : Colors.grey,
@@ -275,6 +300,12 @@ class _DailyHealthEntryPageState extends State<DailyHealthEntryPage> {
                     });
                   },
                 ),
+=======
+                  color: !data[time]! ? Colors.red : Colors.grey,
+                ),
+                onPressed: isDisabled ? null : () => onTap!(time, false),
+              ),
+>>>>>>> ac42521
             ],
           ),
         );
@@ -286,7 +317,11 @@ class _DailyHealthEntryPageState extends State<DailyHealthEntryPage> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
+<<<<<<< HEAD
         const Text("Exercise Done: ", style: TextStyle(fontSize: 16)),
+=======
+        Text("Exercise Done: ", style: TextStyle(fontSize: 16)),
+>>>>>>> ac42521
         Switch(
           value: exerciseDone,
           onChanged: (val) {
@@ -304,16 +339,24 @@ class _DailyHealthEntryPageState extends State<DailyHealthEntryPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+<<<<<<< HEAD
         title: Text(_isExistingEntry ? 'Update Daily Entry' : 'New Daily Entry'),
         backgroundColor: Colors.deepPurple,
       ),
       body: _isLoading
           ? const Center(child: CircularProgressIndicator())
           : SingleChildScrollView(
+=======
+        title: const Text('Daily Health Entry'),
+        backgroundColor: Colors.deepPurple,
+      ),
+      body: SingleChildScrollView(
+>>>>>>> ac42521
         padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+<<<<<<< HEAD
             if (_isExistingEntry)
               Padding(
                 padding: const EdgeInsets.only(bottom: 16.0),
@@ -323,6 +366,8 @@ class _DailyHealthEntryPageState extends State<DailyHealthEntryPage> {
                 ),
               ),
 
+=======
+>>>>>>> ac42521
             _buildSectionTitle("🧠 Headache Level"),
             _buildHeadacheLevel(),
 
@@ -330,8 +375,12 @@ class _DailyHealthEntryPageState extends State<DailyHealthEntryPage> {
             _buildWaterIntake(),
 
             _buildSectionTitle("🍲 Food Intake"),
+<<<<<<< HEAD
             _buildToggleButtons(foodTaken, "Food",
                 onTap: _handleFoodTap, disabled: foodDisabled),
+=======
+            _buildToggleButtons(foodTaken, "Food", onTap: _handleFoodTap, disabled: foodDisabled),
+>>>>>>> ac42521
 
             _buildSectionTitle("🏃‍♀️ Exercise"),
             _buildExerciseToggle(),
@@ -346,11 +395,23 @@ class _DailyHealthEntryPageState extends State<DailyHealthEntryPage> {
             const SizedBox(height: 20),
             Center(
               child: ElevatedButton(
+<<<<<<< HEAD
                 onPressed: _submitData,
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.deepPurple,
                   padding: const EdgeInsets.symmetric(
                       horizontal: 40, vertical: 15),
+=======
+                onPressed: () {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text("Data Submitted Successfully!")),
+                  );
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.deepPurple,
+                  padding:
+                  const EdgeInsets.symmetric(horizontal: 40, vertical: 15),
+>>>>>>> ac42521
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(30),
                   ),
@@ -363,4 +424,8 @@ class _DailyHealthEntryPageState extends State<DailyHealthEntryPage> {
       ),
     );
   }
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> ac42521

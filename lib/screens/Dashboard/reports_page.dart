@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+<<<<<<< HEAD
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:intl/intl.dart'; // Add this import
 import 'package:url_launcher/url_launcher.dart';
@@ -97,6 +98,11 @@ class _ReportsPageState extends State<ReportsPage> {
         return const Icon(Icons.insert_drive_file, color: Colors.grey, size: 32);
     }
   }
+=======
+
+class ReportsPage extends StatelessWidget {
+  const ReportsPage({super.key});
+>>>>>>> ac42521
 
   @override
   Widget build(BuildContext context) {
@@ -105,6 +111,7 @@ class _ReportsPageState extends State<ReportsPage> {
         title: const Text('Medical Reports'),
         backgroundColor: Colors.deepPurple,
       ),
+<<<<<<< HEAD
       body: _isLoading
           ? const Center(child: CircularProgressIndicator())
           : _errorMessage.isNotEmpty
@@ -115,11 +122,18 @@ class _ReportsPageState extends State<ReportsPage> {
         ),
       )
           : Padding(
+=======
+      body: Padding(
+>>>>>>> ac42521
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
             const Text(
+<<<<<<< HEAD
               'Your Medical Reports',
+=======
+              'Your Uploaded Reports',
+>>>>>>> ac42521
               style: TextStyle(
                 fontSize: 22,
                 fontWeight: FontWeight.bold,
@@ -128,6 +142,7 @@ class _ReportsPageState extends State<ReportsPage> {
             ),
             const SizedBox(height: 20),
             Expanded(
+<<<<<<< HEAD
               child: ListView.builder(
                 itemCount: _reports.length,
                 itemBuilder: (context, index) {
@@ -160,29 +175,74 @@ class _ReportsPageState extends State<ReportsPage> {
                     ),
                   );
                 },
+=======
+              child: ListView(
+                children: [
+                  _buildReportCard('Blood Test Report', 'Uploaded on: April 30, 2025'),
+                  _buildReportCard('Brain MRI Scan', 'Uploaded on: March 18, 2025'),
+                  _buildReportCard('Prescription Document', 'Uploaded on: February 10, 2025'),
+                  // ➕ Add more as needed
+                ],
+>>>>>>> ac42521
               ),
             ),
             ElevatedButton.icon(
               onPressed: () {
+<<<<<<< HEAD
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(
                       content: Text("Upload feature coming soon!")),
+=======
+                // TODO: Add upload functionality
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text("Upload feature coming soon!")),
+>>>>>>> ac42521
                 );
               },
               icon: const Icon(Icons.cloud_upload),
               label: const Text("Upload New Report"),
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.deepPurple,
+<<<<<<< HEAD
                 padding: const EdgeInsets.symmetric(
                     horizontal: 24, vertical: 12),
+=======
+                padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+>>>>>>> ac42521
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(16),
                 ),
               ),
+<<<<<<< HEAD
             ),
+=======
+            )
+>>>>>>> ac42521
           ],
         ),
       ),
     );
   }
+<<<<<<< HEAD
 }
+=======
+
+  Widget _buildReportCard(String title, String subtitle) {
+    return Card(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      elevation: 4,
+      margin: const EdgeInsets.only(bottom: 16),
+      child: ListTile(
+        leading: const Icon(Icons.insert_drive_file, color: Colors.deepPurple, size: 32),
+        title: Text(title,
+            style: const TextStyle(fontWeight: FontWeight.bold)),
+        subtitle: Text(subtitle),
+        trailing: const Icon(Icons.visibility, color: Colors.grey),
+        onTap: () {
+          // TODO: Add view report functionality
+        },
+      ),
+    );
+  }
+}
+>>>>>>> ac42521

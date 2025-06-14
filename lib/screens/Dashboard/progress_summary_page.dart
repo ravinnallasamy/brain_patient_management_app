@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+<<<<<<< HEAD
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:intl/intl.dart';
@@ -463,11 +464,17 @@ class _ProgressSummaryPageState extends State<ProgressSummaryPage> {
       ),
     );
   }
+=======
+
+class ProgressSummaryPage extends StatelessWidget {
+  const ProgressSummaryPage({super.key});
+>>>>>>> ac42521
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+<<<<<<< HEAD
         title: const Text("Health Progress Summary"),
         backgroundColor: Colors.deepPurple,
         actions: [
@@ -524,11 +531,41 @@ class _ProgressSummaryPageState extends State<ProgressSummaryPage> {
             ),
             _buildDataTable(),
           ],
+=======
+        title: const Text("Progress Summary"),
+        backgroundColor: Colors.deepPurple,
+      ),
+      body: Center(
+        child: Card(
+          margin: const EdgeInsets.all(20),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+          elevation: 8,
+          child: Padding(
+            padding: const EdgeInsets.all(24),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: const [
+                Icon(Icons.show_chart, size: 60, color: Colors.deepPurple),
+                SizedBox(height: 16),
+                Text(
+                  "Your progress will appear here!",
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                ),
+                SizedBox(height: 8),
+                Text(
+                  "Track your improvements in health over time with graphs and summaries.",
+                  textAlign: TextAlign.center,
+                ),
+              ],
+            ),
+          ),
+>>>>>>> ac42521
         ),
       ),
     );
   }
 }
+<<<<<<< HEAD
 
 class ChartData {
   final String date;
@@ -541,3 +578,5 @@ class ChartData {
     required this.color,
   });
 }
+=======
+>>>>>>> ac42521

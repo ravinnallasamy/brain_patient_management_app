@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+<<<<<<< HEAD
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'screens/Dashboard/dashboard.dart';
 import 'screens/login_screen.dart';
@@ -18,19 +19,35 @@ Future<void> main() async {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
+=======
+import 'screens/login_screen.dart';
+import 'screens/register_screen.dart';
+import 'screens/Dashboard/dashboard.dart';
+
+void main() {
+  runApp(MyApp());
+}
+
+class MyApp extends StatelessWidget {
+>>>>>>> ac42521
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Brain Tumor Patient App',
+<<<<<<< HEAD
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
+=======
+      debugShowCheckedModeBanner: false, // Add this line to remove red DEBUG banner
+>>>>>>> ac42521
       initialRoute: '/',
       routes: {
         '/': (context) => const LoginScreen(),
         '/register': (context) => const RegisterScreen(),
+<<<<<<< HEAD
         '/dashboard': (context) {
           final args = ModalRoute.of(context)!.settings.arguments
           as Map<String, dynamic>? ?? {};
@@ -54,3 +71,10 @@ class MyApp extends StatelessWidget {
     );
   }
 }
+=======
+        '/home': (context) => const DashboardScreen(),
+      },
+    );
+  }
+}
+>>>>>>> ac42521
