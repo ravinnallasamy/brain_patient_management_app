@@ -1,6 +1,7 @@
 <<<<<<< HEAD
 # Brain Patient Management App
 
+<<<<<<< HEAD
 A new Flutter project created to assist brain tumor patients.
 
 Features:
@@ -25,3 +26,6 @@ For help getting started with Flutter development, view the
 [online documentation](https://docs.flutter.dev/), which offers tutorials,
 samples, guidance on mobile development, and a full API reference.
 >>>>>>> 7931222 (Initial Commit)
+=======
+A Flutter-based mobile application for brain tumor patients to track symptoms, medications, vitals, and communicate with doctors.
+>>>>>>> 20623a8198439d51b188926e1edaa6069021ef48
